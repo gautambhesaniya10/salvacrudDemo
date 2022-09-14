@@ -54,6 +54,11 @@ const Homepage = () => {
         message.success("User Deleted Sucessfully")
     }
 
+    const editUser = (edituser) => {
+        console.log("editt", edituser);
+        navigate(`/edituser/${edituser.id}` , {state : edituser})
+    }
+
     const columns = [
         {
             dataField: "Index",
@@ -119,9 +124,14 @@ const Homepage = () => {
                         {filterData?.map((item, index) => {
                             if (item.id == row.id) {
                                 return (
-                                    <button onClick={() => deleteUser(item)} type="submit"  size="sm">
+                                    <>
+                                    <button onClick={() => deleteUser(item)} type="submit" size="sm">
                                         Delete
                                     </button>
+                                    <button onClick={() => editUser(item)} type="submit" size="sm">
+                                        Edit
+                                    </button>
+                                </>
                                 );
                             }
                         })}

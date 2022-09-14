@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Button, Checkbox, Col, Form, Input, message, Radio, Row } from "antd";
 import "../assets/css/User.css";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Adduserform = () => {
 
@@ -15,7 +15,10 @@ const Adduserform = () => {
     Hobby: ""
   });
 
-  console.log("formDataformData", formData);
+  const location = useLocation();
+
+  // console.log("locationn", location);
+  // console.log("formData", formData);
 
   const [form] = Form.useForm();
 
@@ -30,13 +33,24 @@ const Adduserform = () => {
     setFormData({ ...formData, Hobby: value })
   }
 
+  useEffect(() => {
+    if (location.state !== null) {
+      setFormData(location.state)
+    }
+  }, []);
+
   const handleuserSubmit = () => {
 
     const getData = JSON.parse(localStorage.getItem("formdata"));
     if (getData !== null) {
-      let storeData = [...getData, formData];
-      localStorage.setItem("formdata", JSON.stringify(storeData))
-
+      if (location.state !== null) {
+        const filterdata = getData.filter(item => item.id !== location.state.id);
+        console.log("filterdata",filterdata);
+        localStorage.setItem("formdata", JSON.stringify(filterdata))
+      }else{
+        let storeData = [...getData, formData];
+        localStorage.setItem("formdata", JSON.stringify(storeData))
+      }
     } else {
       localStorage.setItem("formdata", JSON.stringify([formData]))
     }
@@ -56,15 +70,21 @@ const Adduserform = () => {
           <div className="">
             <div className="headFormDiv">
               <div>
-                <h5 style={{ color: "black" }}>
-                  Add User
-                </h5>
+                {
+                  location?.state?.id ? <h5 style={{ color: "black" }}>
+                    Edit User
+                  </h5> : <h5 style={{ color: "black" }}>
+                    Add User
+                  </h5>
+                }
+
               </div>
             </div>
             <Form form={form} name="register" onFinish={handleuserSubmit}>
               <div style={{ padding: "1%" }}>
                 <Form.Item
                   name="Name"
+                  value={formData.Name}
                   label="Name"
                   rules={[
                     {
@@ -75,6 +95,8 @@ const Adduserform = () => {
                 >
                   <Input
                     placeholder="Enter Your name"
+                    value={formData.Name}
+
                     name="Name"
                     onChange={(e) => onchangeForm(e)}
                   />

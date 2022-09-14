@@ -9,6 +9,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Homepage />} />
         <Route path='/adduser' element={<Adduserform />} />
+        <Route path='/edituser/:id' element={<Adduserform />} />
       </Routes>
       
     </div>
