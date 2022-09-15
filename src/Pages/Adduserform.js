@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const Adduserform = () => {
 
+  const [form] = Form.useForm();
   const [formData, setFormData] = useState({
     id: Math.random(),
     Name: "",
@@ -16,11 +17,16 @@ const Adduserform = () => {
   });
 
   const location = useLocation();
-
-  // console.log("locationn", location);
+  // console.log("loactionnn", location.state);
   // console.log("formData", formData);
 
-  const [form] = Form.useForm();
+  useEffect(() => {
+    if (location.state !== null) {
+      setFormData(location.state)
+    }
+  }, []);
+  
+
 
   const navigate = useNavigate()
 
@@ -33,34 +39,44 @@ const Adduserform = () => {
     setFormData({ ...formData, Hobby: value })
   }
 
-  useEffect(() => {
+  const editData = () => {
     if (location.state !== null) {
-      setFormData(location.state)
+      const getData = JSON.parse(localStorage.getItem("formdata"));
+      const filterdata = getData.filter(item => item.id !== location.state.id);
+      let storeData = [...filterdata, formData];
+      localStorage.setItem("formdata", JSON.stringify(storeData))
+      message.success("User Edit sucessfully !")
     }
-  }, []);
+  }
+  const addData = () => {
+    const getData = JSON.parse(localStorage.getItem("formdata"));
+    if (getData !== null) {
+      let storeData = [...getData, formData];
+      localStorage.setItem("formdata", JSON.stringify(storeData));
+      message.success("User add sucessfully !")
+    } else if (getData === null) {
+      localStorage.setItem("formdata", JSON.stringify([formData]));
+      message.success("User add sucessfully !")
+
+    }
+  }
 
   const handleuserSubmit = () => {
 
-    const getData = JSON.parse(localStorage.getItem("formdata"));
-    if (getData !== null) {
-      if (location.state !== null) {
-        const filterdata = getData.filter(item => item.id !== location.state.id);
-        console.log("filterdata",filterdata);
-        localStorage.setItem("formdata", JSON.stringify(filterdata))
-      }else{
-        let storeData = [...getData, formData];
-        localStorage.setItem("formdata", JSON.stringify(storeData))
-      }
+    if (location.state !== null) {
+      editData();
+      setTimeout(() => {
+        navigate("/")
+      }, 1000);
     } else {
-      localStorage.setItem("formdata", JSON.stringify([formData]))
+      addData();
+      setTimeout(() => {
+        navigate("/")
+      }, 1000);
     }
-
-    message.success("User add sucessfully !")
-
-    setTimeout(() => {
-      navigate("/")
-    }, 1000);
-
+    // {
+    //   location.state !== null ?  message.success("User Edit sucessfully !") :  message.success("User add sucessfully !");
+    // }
   }
 
   return (
@@ -80,11 +96,16 @@ const Adduserform = () => {
 
               </div>
             </div>
-            <Form form={form} name="register" onFinish={handleuserSubmit}>
+
+            <Form initialValues={{
+              Name: "dummy",
+            }}
+              form={form} name="register" onFinish={handleuserSubmit}>
               <div style={{ padding: "1%" }}>
+                {/* <input type="text" name="Name" value={formData.Name} onChange={(e) => onchangeForm(e)}/> */}
                 <Form.Item
                   name="Name"
-                  value={formData.Name}
+                  // value={formData.Name}
                   label="Name"
                   rules={[
                     {
@@ -96,7 +117,6 @@ const Adduserform = () => {
                   <Input
                     placeholder="Enter Your name"
                     value={formData.Name}
-
                     name="Name"
                     onChange={(e) => onchangeForm(e)}
                   />

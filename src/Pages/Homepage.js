@@ -46,7 +46,6 @@ const Homepage = () => {
     });
 
     const deleteUser = (deluser) => {
-        console.log("deluser123", deluser);
         const remaingData = filterData && filterData.filter(item => item.id !== deluser.id);
         console.log("remaingData",remaingData);
         localStorage.setItem("formdata", JSON.stringify(remaingData));
@@ -55,7 +54,6 @@ const Homepage = () => {
     }
 
     const editUser = (edituser) => {
-        console.log("editt", edituser);
         navigate(`/edituser/${edituser.id}` , {state : edituser})
     }
 
