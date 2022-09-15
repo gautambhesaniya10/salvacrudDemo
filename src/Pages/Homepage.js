@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "bootstrap/dist/css/bootstrap.css";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -45,12 +45,15 @@ const Homepage = () => {
         }
     });
 
+    useEffect(() => {
+        setstate(false)
+    }, [state]);
+
     const deleteUser = (deluser) => {
         const remaingData = filterData && filterData.filter(item => item.id !== deluser.id);
-        console.log("remaingData",remaingData);
         localStorage.setItem("formdata", JSON.stringify(remaingData));
-        setstate(true)
         message.success("User Deleted Sucessfully")
+        setstate(true)
     }
 
     const editUser = (edituser) => {

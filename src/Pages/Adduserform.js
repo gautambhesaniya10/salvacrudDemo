@@ -17,18 +17,15 @@ const Adduserform = () => {
   });
 
   const location = useLocation();
-  // console.log("loactionnn", location.state);
-  // console.log("formData", formData);
+  const navigate = useNavigate()
 
+  form.setFieldsValue(formData)
   useEffect(() => {
     if (location.state !== null) {
       setFormData(location.state)
     }
+
   }, []);
-  
-
-
-  const navigate = useNavigate()
 
   const onchangeForm = (e) => {
     const { name, value } = e.target;
@@ -97,15 +94,10 @@ const Adduserform = () => {
               </div>
             </div>
 
-            <Form initialValues={{
-              Name: "dummy",
-            }}
-              form={form} name="register" onFinish={handleuserSubmit}>
+            <Form form={form} name="register" onFinish={handleuserSubmit}>
               <div style={{ padding: "1%" }}>
-                {/* <input type="text" name="Name" value={formData.Name} onChange={(e) => onchangeForm(e)}/> */}
                 <Form.Item
                   name="Name"
-                  // value={formData.Name}
                   label="Name"
                   rules={[
                     {
@@ -116,7 +108,6 @@ const Adduserform = () => {
                 >
                   <Input
                     placeholder="Enter Your name"
-                    value={formData.Name}
                     name="Name"
                     onChange={(e) => onchangeForm(e)}
                   />
@@ -169,12 +160,31 @@ const Adduserform = () => {
                 </Form.Item>
               </div>
               <div style={{ padding: "1%" }}>
-                <Radio.Group name='Gender' onChange={(e) => onchangeForm(e)} >
-                  <Radio value={"male"}>Male</Radio>
-                  <Radio value={"female"}>Female</Radio>
-                </Radio.Group>
+                <Form.Item
+                name='Gender'
+                 rules={[
+                  {
+                    required: true,
+                    message: "Please selact your gender !",
+                  },
+                ]}
+                >
+                  <Radio.Group name='Gender' onChange={(e) => onchangeForm(e)} >
+                    <Radio value="male">Male</Radio>
+                    <Radio value="female">Female</Radio>
+                  </Radio.Group>
+                </Form.Item>
               </div>
               <div style={{ marginTop: "5%" }}>
+              <Form.Item
+                name='Hobby'
+                 rules={[
+                  {
+                    required: true,
+                    message: "Please selact your hobby !",
+                  },
+                ]}
+                >
                 <Checkbox.Group
                   style={{
                     width: '100%',
@@ -194,6 +204,7 @@ const Adduserform = () => {
                     </Col>
                   </Row>
                 </Checkbox.Group>
+                </Form.Item>
               </div>
               <Form.Item className="btnClass">
                 <Button
