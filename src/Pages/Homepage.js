@@ -31,7 +31,7 @@ const Homepage = () => {
             Age: "23",
             Phone: "9429914508",
             Gender: "Male",
-            Hobby: "cricket"
+            Hobby: ["cricket" , "Traveling"]
         }]))
     }
 
@@ -57,7 +57,7 @@ const Homepage = () => {
     }
 
     const editUser = (edituser) => {
-        navigate(`/edituser/${edituser.id}` , {state : edituser})
+        navigate(`/edituser/${edituser.id}`, { state: edituser })
     }
 
     const columns = [
@@ -100,13 +100,27 @@ const Homepage = () => {
             text: "Gender",
             headerStyle: () => {
                 return { width: "75px", fontSize: "14px" };
-            },
+            }
         },
         {
             dataField: "Hobby",
             text: "Hobby",
             headerStyle: () => {
                 return { width: "110px", fontSize: "14px" };
+            },
+            formatter: (rowContent, row) => {
+                return (
+                    <>
+                        {
+                           row && row?.Hobby?.map((item ,index) => {
+                                return (
+                                    `  ${item}  `
+                                )
+                            })
+                        }
+                    </>
+                )
+
             },
         },
         {
@@ -126,13 +140,13 @@ const Homepage = () => {
                             if (item.id == row.id) {
                                 return (
                                     <>
-                                    <button onClick={() => deleteUser(item)} type="submit" size="sm">
-                                        Delete
-                                    </button>
-                                    <button onClick={() => editUser(item)} type="submit" size="sm">
-                                        Edit
-                                    </button>
-                                </>
+                                        <button onClick={() => deleteUser(item)} type="submit" size="sm">
+                                            Delete
+                                        </button>
+                                        <button onClick={() => editUser(item)} type="submit" size="sm">
+                                            Edit
+                                        </button>
+                                    </>
                                 );
                             }
                         })}
